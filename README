@@ -1,0 +1,23 @@
+=head1 NAME
+
+SMLP Generator
+
+=head1 SYNOPSIS
+
+Statistical Machine Language Generator
+
+=head1 DESCRIPTION
+
+The purpose of this project is to generate machine language code based on the
+collected corpus. Using various statistical methods and a context free grammar,
+this project aims to generate machine language that will hopefully create some
+rather interesting results. The goal is to create a website automatically that
+is indistiguishable from the rest of the garbage on the internet.
+
+=head1 AUTHORS
+
+Jason Switzer <jswitzer at gmail dot com>
+Alan Davis
+Ryan Garabedian
+
+=cut
