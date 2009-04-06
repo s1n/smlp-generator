@@ -1,0 +1,23 @@
+# robots.txt for http://www.DarwinAwards.com
+
+User-agent: *
+
+Disallow: /*/nav*
+Disallow: /cgi-share/*
+Disallow: /cgi/*
+Disallow: /css/*
+Disallow: /deutsch/*
+Disallow: /error/*
+Disallow: /espanol/*
+Disallow: /francais/*
+Disallow: /i/*
+Disallow: /ikon/*
+Disallow: /media/*
+Disallow: /misc/*
+Disallow: /nav*
+Disallow: /old/REJECT*
+Disallow: /old/REMOVE*
+Disallow: /old/DELETE*
+Disallow: /russia/*
+Disallow: /slush/*
+Disallow: /reject/*

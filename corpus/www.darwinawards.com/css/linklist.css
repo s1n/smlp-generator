@@ -1,0 +1,7 @@
+BODY, TD, LI, P, FORM, HR { color: #003366; font-family: Arial, Helvetica, sans-serif }
+H1 { color: #FF0000; font-weight: normal; font-family: Arial, Helvetica, sans-serif }
+H2, H3, H4, H5, H6 { color: #000000; font-weight: normal; font-family: Arial, Helvetica, sans-serif }
+A { font-weight: normal; text-decoration: none }
+LINK { font-weight: normal; color: #0000FF }
+ALINK { font-weight: normal; color: #FF0000 }
+VLINK { font-weight: normal; color: #1F7772 }
