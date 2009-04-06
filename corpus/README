@@ -1,0 +1,26 @@
+=head1 NAME
+
+Corpus Data
+
+=head1 SYNOPSIS
+
+SMLP Generator corpus data for training the model.
+
+=head1 DESCRIPTION
+
+Everything under this folder is not the owner of the listed authors. The content
+was mirrored from real websites using C<wget>. All copyrights of this corpus
+data is retained by the original websites' authors.
+
+This data is mirrored here as a convenience to the project. No ownership is
+claimed merely by its presence in this repository.
+
+See the original websites for the current data and appropriate legal notices.
+
+=head1 AUTHORS
+
+ Jason Switzer <jswitzer at gmail dot com>
+ Alan Davis
+ Ryan Garabedian
+
+=cut
