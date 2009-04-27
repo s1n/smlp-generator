@@ -1,9 +1,9 @@
 # Statistical NLP Project - 4/26/09
 # Alan Davis, Jason Switzer, Ryan Garabedian
-# Parse.py: Parses files in a corpus given at the command line
+# Generate.py: Generates text by sampling Markov chain transitions
 
 import sys
-from Parser import *
+from Generator import *
 
 # Create an empty list of directory names
 dirnames = []
@@ -21,19 +21,19 @@ for arg in sys.argv[1:]:
 
 # Parse files in each directory
 for dirname in dirnames:
-    print 'Parsing files in directory:', dirname
-    parseFilesInDir(dirname, debug)
+    print 'Generating a test file in directory:', dirname
+    generateTextFromDir(dirname, dirname + 'test.html', debug)
 
 # Print a help prompt to the user
 if len(dirnames) == 0:
-    print 'Usage:   Parse.py dirname1, dirname2, ... [-debug]'
+    print 'Usage:   Generate.py dirname1, dirname2, ... [-debug]'
 
 # Change the directory or filename here to test
 test = False
 if test:
-    # Parse text in a test directory or file
+    # Generate text in a test directory or file
     dirname = '../corpus/' + 'test/'##'MrX/'
-    filename = dirname + 'example.html'##'bagels.htm'##
-    debug = True##False##
-    parseFilesInDir(dirname, debug)
-##    parseFile(filename, debug=debug)
+    filename = dirname + 'example.html'##'bagels.htm'
+    debug = True
+    # Test the generate text function
+    generateTextFromDir(dirname, dirname + 'test.html', debug=True)

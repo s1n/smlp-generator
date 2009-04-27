@@ -1,11 +1,12 @@
-# Alan Davis - Statistical NLP Project - 4/26/09
+# Statistical NLP Project - 4/26/09
+# Alan Davis, Jason Switzer, Ryan Garabedian
 # Parser.py: Parses HTML documents and counts tag transitions
 
-import glob, re, pprint, pickle
+import glob, pickle, pprint, re
 from BeautifulSoup import BeautifulSoup, Comment, NavigableString, Tag
 
-dataExt   = '.dat'          # File name extension for data files
-transFile = 'transitions'   # File name for transition counts
+textSymbol  = 'TEXT'            # Special symbol for document text
+transFile   = 'transitions.dat' # File name for the tag transition counts
 
 def parseFilesInDir(directory, debug=False):
     '''Parse all HTML files inside the given directory'''
@@ -22,8 +23,8 @@ def parseFilesInDir(directory, debug=False):
     if debug:
         print 'Transitions Map:'
         pprint.pprint(transitions)
-    # Save the transition counts, n-gram counts, and statistics to the data files
-    saveTransitions(transitions, directory + transFile + dataExt)
+    # Save the transition counts to the data file
+    saveTransitions(transitions, directory + transFile)
 
 def parseFile(filename, transitions={}, debug=False):
     '''Parse HTML code from the given file and put the transition counts in the given dictionary'''
@@ -44,7 +45,7 @@ def parseFile(filename, transitions={}, debug=False):
     countTagTrans(soup.html, transitions, debug)
 
 def countTagTrans(node, trans, debug=False):
-    '''Count the HTML tag tranitions starting from the given node'''
+    '''Count the HTML tag transitions starting from the given node'''
     # Check if the given node is a tag or string
     if isinstance(node, Tag):
         tag = node
@@ -53,40 +54,35 @@ def countTagTrans(node, trans, debug=False):
 ##            print 'tag name:', tag.name
 ##            print 'tag contents:', tag.contents
         rule = []
+        # Loop over each child of the tag
         for child in tag.contents:
+            # Append the child tag name and recursively count the tag transitions
             if isinstance(child, Tag):
                 rule.append(str(child.name.upper()))
                 countTagTrans(child, trans, debug)
+            # Append the child string as a text symbol if it is not whitespace
             elif isinstance(child, NavigableString):
                 if not re.match(r'^\s+$', child):
-                    rule.append('TEXT')
+                    rule.append(textSymbol)
             else:
                 print '!!! unknown child type:', child
+        # Check if the tag is in the transition map
         if tagname not in trans:
             trans[tagname] = {}
+        # Increment the tag -> rule transition count
         trans[tagname][tuple(rule)] = trans[tagname].get(tuple(rule), 0) + 1
         if debug: print 'trans['+tagname+']['+liststr(rule)+']:', trans[tagname][tuple(rule)]
     elif debug: print '!!! non-Tag node given to countTagTrans:', node
 
-def liststr(alist):
-    '''Return a string representation of the given list'''
-    if isinstance(alist, tuple) or isinstance(alist, list):
-        return ','.join(alist)
-    else:
-        return ''
-
 def removeJunk(soup, debug=False):
     '''Remove junk HTML tags from the given BeautifulSoup'''
-    if debug:
-        print separator('removing junk')
-    # Remove all script, style, meta, link, object, embed, applet, and img elements
-    junkTags = ['script', 'style', 'meta', 'link', 'object', 'embed', 'applet', 'img']
-    junkElements = []
+    if debug: print separator('removing junk')
+    # Remove all unsupported elements
+    junkTags = ['applet', 'embed', 'object', 'script', 'meta', 'link', 'style', 'img', 'a']
     for junkTag in junkTags:
-        junkElements += soup.findAll(junkTag)
-    for junkElement in junkElements:
-        junkElement.extract()
-        if debug: print 'junk:', junkElement
+        for junk in soup.findAll(name=junkTag):
+            junk.extract()
+            if debug: print 'junk:', junk
     # Remove all comments
     for comment in soup.findAll(text=isComment):
         comment.extract()
@@ -94,10 +90,17 @@ def removeJunk(soup, debug=False):
 
 def isComment(text):
     '''Return true if the given text is an instance of Comment'''
-    # Return true if text is a comment
     return isinstance(text, Comment)
 
+def liststr(alist):
+    '''Return a string representation of the given list or tuple'''
+    if isinstance(alist, list) or isinstance(alist, tuple):
+        return ','.join(alist)
+    else:
+        return ''
+
 def separator(title):
+    '''Return a string separator with the given title'''
     return '\n---------- ' + title + ' ----------'
 
 def saveTransitions(transitions, datafilename):
