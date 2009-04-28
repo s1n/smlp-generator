@@ -5,28 +5,18 @@
 import random, re
 from Parser import *
 
-def generateTextFromDir(directory, filename=None, debug=False):
-    '''Generate text using the n-gram Markov model in the given directory'''
-    if not directory.endswith('/'):
-        directory += '/'
-    # Load the transition counts from the data files
-    trans = loadTransitions(directory + transFile)
-    # Initialize the statistics
-##    tagCount = 0
-    # Initialize a document with the HTML tag
+def generateText(transfile, filename = None, debug = False):
+    '''Generates a single output document using the n-gram Markov model given a transition matrix'''
+    trans = loadTransitions(transfile)
     document = []
     generateTagTrans('HTML', trans, document, debug)
-    # Print the statistics
-##    print 'Tag Count: ', tagCount
-    # Print a pretty version of the document
     soup = BeautifulSoup('\n'.join(document))
     docstring = soup.prettify()
     if debug:
         print 'document length:', len(document)
         print separator('Generated HTML'), docstring
-    # Write the generated document to the file
     if filename:
-        print 'Writing generated HTML document to file:', filename
+        print 'Writing generated HTML document to file: ', filename
         file = open(filename, 'w')
         file.write(docstring)
         file.close()
