@@ -2,20 +2,29 @@
 # Alan Davis, Jason Switzer, Ryan Garabedian
 # Parser.py: Parses HTML documents and counts tag transitions
 
-import glob, pickle, pprint, re
+import glob, pickle, pprint, re, os, fnmatch
 from BeautifulSoup import BeautifulSoup, Comment, NavigableString, Tag
 
 textSymbol  = 'TEXT'            # Special symbol for document text
 transFile   = 'transitions.dat' # File name for the tag transition counts
+
+# Initialize the tag transition map
+transitions = {}
+
+'''Brorrowed from the ActiveState recepies, recursive glob'''
+def rglob(pattern, root=os.curdir):
+    '''Locate all files matching supplied filename pattern in and below
+       supplied root directory.'''
+    for path, dirs, files in os.walk(os.path.abspath(root)):
+        for filename in fnmatch.filter(files, pattern):
+            yield os.path.join(path, filename)
 
 def parseFilesInDir(directory, debug=False):
     '''Parse all HTML files inside the given directory'''
     if not directory.endswith('/'):
         directory += '/'
     # Find the file names of all HTML files
-    filenames = glob.glob(directory + '*htm*')
-    # Initialize the tag transition map
-    transitions = {}
+    filenames = rglob("*htm*", directory)
     # Loop over all file names in sorted order
     for filename in sorted(filenames):
         # Parse the HTML file
@@ -23,8 +32,7 @@ def parseFilesInDir(directory, debug=False):
     if debug:
         print 'Transitions Map:'
         pprint.pprint(transitions)
-    # Save the transition counts to the data file
-    saveTransitions(transitions, directory + transFile)
+    # transitions are saved outside of here
 
 def parseFile(filename, transitions={}, debug=False):
     '''Parse HTML code from the given file and put the transition counts in the given dictionary'''
@@ -103,12 +111,16 @@ def separator(title):
     '''Return a string separator with the given title'''
     return '\n---------- ' + title + ' ----------'
 
-def saveTransitions(transitions, datafilename):
+def saveTransitions(datafilename = None):
     '''Save the given transition counts to the given data file'''
+    if datafilename is None:
+        datafilename = transFile
     print 'Saving transition counts to data file:', datafilename
     # Open the data file and dump the n-gram counts into it
     datafile = open(datafilename, 'wb')
     pickle.dump(transitions, datafile)
+    if not transitions:
+        print "!!! null transition table written"
     datafile.close()
 
 def loadTransitions(datafilename):
@@ -117,5 +129,7 @@ def loadTransitions(datafilename):
     # Open the data file and load the n-gram counts from it
     datafile = open(datafilename, 'rb')
     transitions = pickle.load(datafile)
+    if not transitions:
+        print "!!! null transition table loaded"
     datafile.close()
     return transitions
