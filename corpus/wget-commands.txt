@@ -1,0 +1,30 @@
+Wget options
+============
+
+wget http://www.domain.com/directory/file.html
+
+-q	quiet
+-v	verbose
+
+-i file		reads URLs from file (text or HTML)
+-F		forces input file to be treated as HTML
+-B URL		prefixes relative links with URL (use with -i)
+
+-E		ensures all pages end with .html suffix
+-O file		concatenates all downloaded files into file
+-P prefix	puts files into folder with prefix
+-nH		removes domain folder
+--cut-dirs=#	removes # of subdirectories starting from domain
+
+-r		recursive retrieval
+-l		maximum recursion depth
+
+-p		also download images, sounds, stylesheets, etc.
+-D domain-list	domains to follow (comma-separated list)
+
+-A accept-list	acceptance list (can use wildcards, e.g.: "image*[0-9].jpg")
+-R reject-list	rejection list
+
+-I include-list	include directories in list
+-X exclude-list	exclude directories in list
+-np		disallow moving to parent directory of given URL

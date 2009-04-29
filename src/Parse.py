@@ -6,13 +6,10 @@ import sys, optparse
 from Parser import *
 from optparse import OptionParser
 
-# Create an empty list of directory names
-dirnames = []
-
 # Read command line arguments
 opts = OptionParser()
-opts.add_option("--transfile", "-t", help="transition file")
-opts.add_option("--debug", "-v", help="debugging output", action="store_true", default = True)
+opts.add_option('--transfile', '-t', help='transition file')
+opts.add_option('--debug', '-v', help='debugging output', action='store_true')
 options, arguments = opts.parse_args()
 
 # Parse files in each directory
@@ -20,4 +17,6 @@ for dir in arguments:
     print 'Parsing files in directory:', dir
     parseFilesInDir(dir, options.debug)
 
-saveTransitions(options.transfile)
+# Save the transitions map
+if arguments:
+    saveTransitions(options.transfile)
