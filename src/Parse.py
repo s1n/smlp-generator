@@ -8,15 +8,17 @@ from optparse import OptionParser
 
 # Read command line arguments
 opts = OptionParser()
-opts.add_option('--transfile', '-t', help='transition file')
-opts.add_option('--debug', '-v', help='debugging output', action='store_true')
+opts.add_option('--debug', '-v', help = 'enable debugging output', action='store_true')
+opts.add_option('--progressive', '-p', help = 'continues the previous parsing', action='store_true')
+opts.add_option('--objfile', '-o', help = 'object output file')
 options, arguments = opts.parse_args()
 
 # Parse files in each directory
+p = Parser(options.objfile, options.progressive, options.debug)
 for dir in arguments:
     print 'Parsing files in directory:', dir
-    parseFilesInDir(dir, options.debug)
+    p.parseFilesInDir(dir)
 
 # Save the transitions map
-if arguments:
-    saveTransitions(options.transfile)
+if arguments and not options.progressive:
+    p.freeze()
